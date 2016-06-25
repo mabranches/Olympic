@@ -1,0 +1,2 @@
+class JavelinThrow < Competition
+end
