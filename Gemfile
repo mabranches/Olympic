@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.3.1'
+
 gem 'rails', '4.2.6'
 gem 'rails-api'
 gem 'sqlite3'
@@ -7,10 +9,13 @@ gem 'jsonapi-resources',git: 'git@github.com:cerebris/jsonapi-resources.git', re
 
 group :development, :test do
   gem 'byebug'
-  gem 'rspec-rails'
   gem 'spring'
+  gem 'rubocop'
 end
 
 group :test do
   gem 'simplecov', require: false
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
 end
