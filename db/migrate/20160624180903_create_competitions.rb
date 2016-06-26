@@ -1,10 +1,10 @@
 class CreateCompetitions < ActiveRecord::Migration
   def change
     create_table :competitions do |t|
-      t.string :name
-      t.string :type
+      t.string :name, null: false
+      t.string :type, null: false
       t.integer :lock_version
-      t.integer :status
+      t.integer :status, null:false, default: 0
 
       t.timestamps null: false
     end
