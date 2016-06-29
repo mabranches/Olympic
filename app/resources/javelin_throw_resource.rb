@@ -1,2 +1,0 @@
-class JavelinThrowResource < CompetitionResource
-end
