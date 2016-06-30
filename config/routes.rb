@@ -18,5 +18,8 @@ Rails.application.routes.draw do
       end
     end
 
+    jsonapi_resources :scores, only: [:index, :show] do
+    end
+
   end
 end
