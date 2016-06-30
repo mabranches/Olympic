@@ -1,6 +1,6 @@
 module V1
   class ScoreResource < JSONAPI::Resource
-    attributes :value, :athlete_name, :competition_name
+    attributes :result, :athlete_name, :competition_name
     belongs_to :athlete
     belongs_to :competition
 
@@ -10,6 +10,9 @@ module V1
 
     def competition_name
       competition.name
+    end
+    def result
+      value.to_s + competition.unity
     end
 #    class << self
 #      def apply_includes(records, directives)
