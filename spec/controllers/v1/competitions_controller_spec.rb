@@ -1,5 +1,15 @@
 require 'rails_helper'
-
+#simple
+#GET    /v1/competitions(.:format) - done
+#POST   /v1/competitions(.:format)
+#GET    /v1/competitions/:id(.:format)
+#PATCH  /v1/competitions/:id(.:format)
+#PUT    /v1/competitions/:id(.:format)
+#DELETE /v1/competitions/:id(.:format)
+#GET    /v1/competitions/types(.:format)
+#atletas
+#GET    /v1/athletes/:athlete_id/competitions(.:format)                            v1/competitions#index
+#GET    /v1/athletes/:athlete_id/competitions/:id(.:format)                        v1/competitions#show
 RSpec.describe V1::CompetitionsController, type: :controller do
 
   let(:json_response){JSON.parse(response.body, symbolize_names: true)}
@@ -9,7 +19,6 @@ RSpec.describe V1::CompetitionsController, type: :controller do
         create(:competition)
       end
     end
-
     before do
       get :index
       @result = json_response
@@ -23,13 +32,38 @@ RSpec.describe V1::CompetitionsController, type: :controller do
 
     it 'resouce with correct attributes' do
       competition = @result[:data].sample
-      expect(["run100ms", "javelin-throws"]).to include (competition[:type])
+      expect(["run100ms", "javelin-throws"]).to include(competition[:type])
+      expect(['running','finished']).to include(competition[:attributes][:name]).
       expect(competition[:attributes][:name]).
         to a_string_starting_with('competition')
     end
   end
+  describe 'GET #show' do
+      #get SHOW
+      #competicao existente
+        #pega um competicao
+      #--competicao nao existe
+        #tenta competicao que nao existe
 
-  describe 'GEt #types' do
+  end
+
+  describe 'PATCH #update' do
+
+      #PATCH update
+      #--competicao nao existe
+        #altera competicao
+      #altera competicao
+      #altera nome  da competicao
+      #altera status da competicao
+  end
+      #POST create
+        #cria uma competicao nova
+        #tenta criar com partes faltando
+      #
+    end
+  end
+
+  describe 'GET #types' do
     it "should return types" do
       controller.request.env['REQUEST_URI'] = 'http://example.com/competitions/types'
       controller.request.env['PATH_INFO'] = '/competitions/types'
@@ -38,4 +72,11 @@ RSpec.describe V1::CompetitionsController, type: :controller do
       expect(result[:data].length).to eq(CompetitionType.all.length)
     end
   end
+
+  describe 'GET #rank'
+    #rank do javelin-throw
+    #rank do run10mm
+    #rank com competicao nao encerrada
+  end
+
 end

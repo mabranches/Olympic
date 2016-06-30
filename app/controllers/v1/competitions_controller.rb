@@ -3,7 +3,6 @@ module V1
     include JSONAPI::ActsAsResourceController
 
     def types
-      byebug
       base_url = request.env['REQUEST_URI'].split(request.env['PATH_INFO'])[0]
       type_serializer = Serializer.new(CompetitionTypeResource, base_url: base_url)
       types = CompetitionType.all
