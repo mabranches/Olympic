@@ -1,6 +1,6 @@
 module V1
   class CompetitionResource < JSONAPI::Resource
-    attributes :id, :name, :status
+    attributes :name, :status
     has_many :scores
     has_many :athletes, through: :scores
     def records_for(relationship_name)
