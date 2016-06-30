@@ -1,20 +1,6 @@
 module V1
   class CompetitionsController < ApplicationController
-
-    def index
-    end
-
-    def show
-    end
-
-    def create
-    end
-
-    def update
-    end
-
-    def destroy
-    end
+    include JSONAPI::ActsAsResourceController
 
     def types
       byebug
