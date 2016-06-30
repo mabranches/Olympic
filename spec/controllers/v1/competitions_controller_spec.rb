@@ -14,12 +14,10 @@ RSpec.describe V1::CompetitionsController, type: :controller do
 
   let(:json_response){JSON.parse(response.body, symbolize_names: true)}
   describe 'GET #index' do
-    before(:all) do
+    before do
       30.times do
         create(:competition)
       end
-    end
-    before do
       get :index
       @result = json_response
     end
@@ -33,12 +31,35 @@ RSpec.describe V1::CompetitionsController, type: :controller do
     it 'resouce with correct attributes' do
       competition = @result[:data].sample
       expect(["run100ms", "javelin-throws"]).to include(competition[:type])
-      expect(['running','finished']).to include(competition[:attributes][:name]).
+      expect(['running','finished']).to include(competition[:attributes][:status])
       expect(competition[:attributes][:name]).
         to a_string_starting_with('competition')
     end
   end
   describe 'GET #show' do
+    context 'competition exists' do
+      before do
+        @competition = create(:competition)
+      end
+      it 'shoud show data' do
+        get :show, id: @competition.id
+        expect(response).to have_http_status(:ok)
+        data = json_response[:data]
+        expect(data[:id]).to eq(@competition.id.to_s)
+        expect(data[:attributes][:name]).to eq(@competition.name)
+        expect(data[:attributes][:status]).to eq(@competition.status)
+      end
+    end
+    context 'competition don\'t exist' do
+      it 'should return error' do
+        get :show, id: 1
+        expect(response).to have_http_status(:not_found)
+        data = json_response#[:data][0]
+        expect(data).to have_key(:errors)
+        expect(data[:errors][0][:title]).to eq("Record not found")
+        expect(data[:errors][0][:detail]).to eq("The record identified by 1 could not be found.")
+      end
+    end
       #get SHOW
       #competicao existente
         #pega um competicao
@@ -56,11 +77,12 @@ RSpec.describe V1::CompetitionsController, type: :controller do
       #altera nome  da competicao
       #altera status da competicao
   end
+
+  describe 'POST #create' do
       #POST create
         #cria uma competicao nova
         #tenta criar com partes faltando
       #
-    end
   end
 
   describe 'GET #types' do
@@ -73,7 +95,7 @@ RSpec.describe V1::CompetitionsController, type: :controller do
     end
   end
 
-  describe 'GET #rank'
+  describe 'GET #rank' do
     #rank do javelin-throw
     #rank do run10mm
     #rank com competicao nao encerrada
