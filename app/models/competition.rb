@@ -5,6 +5,10 @@ class Competition < ActiveRecord::Base
   has_many :scores
   has_many :athletes, -> {distinct}, through: :scores
 
+  def unity
+    UNITY
+  end
+
   def self.types
     id = 0
     @types ||= Competition.descendants.collect do |d|
@@ -12,5 +16,4 @@ class Competition < ActiveRecord::Base
       CompetitionType.new(id, d.name)
     end
   end
-
 end
