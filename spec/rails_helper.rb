@@ -83,7 +83,8 @@ RSpec.shared_examples "competition rank" do |competition_type, n_athletes,
     expect(response).to have_http_status(:ok)
     result = json_response
     result[:data].each_with_index do |score, i|
-      expect(score[:attributes][:result]).to eq(expected_ranking[i][:value].to_f.to_s  + competition.unity)
+      expect(score[:attributes][:value]).to eq(expected_ranking[i][:value])
+      expect(score[:attributes][:unity]).to eq(competition.unity)
       expect(score[:attributes][:'athlete-name']).to eq(expected_ranking[i][:athlete].name)
     end
   end

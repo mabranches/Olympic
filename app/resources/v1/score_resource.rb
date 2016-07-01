@@ -1,6 +1,6 @@
 module V1
   class ScoreResource < JSONAPI::Resource
-    attributes :result, :athlete_name, :competition_name
+    attributes :value, :unity, :athlete_name, :competition_name
     has_one :athlete
     has_one :competition
 
@@ -11,8 +11,9 @@ module V1
     def competition_name
       @model.competition.name
     end
-    def result
-      @model.value.to_s + @model.competition.unity
+
+    def unity
+      @model.competition.unity
     end
   end
 end
