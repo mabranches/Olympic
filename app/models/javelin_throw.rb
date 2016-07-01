@@ -3,6 +3,6 @@ class JavelinThrow < Competition
   UNITY = 'm'
   def rank
     scores.includes(:athlete).group(:athlete_id).
-      order('max(scores.value)')
+      order('max(scores.value) desc', 'athletes.age desc', 'athletes.name asc')
   end
 end
