@@ -23,4 +23,4 @@ en:
     beyond_allowed_amount_limit:
       one: "This competition only allow 1 score."
       other: "This competition only allow %{count} scores."
-
+    competition_finished: "Competition Finished. Can't add any more scores."
