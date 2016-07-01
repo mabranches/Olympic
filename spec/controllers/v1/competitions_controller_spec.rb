@@ -96,9 +96,42 @@ RSpec.describe V1::CompetitionsController, type: :controller do
   end
 
   describe 'GET #rank' do
-    #rank do javelin-throw
-    #rank do run10mm
-    #rank com competicao nao encerrada
+    context 'javelin-throw competition' do
+      before do
+        @competition = create(:javelin_throw)
+        athletes = []
+        4.times {athletes << create(:athlete)}
+
+        #3 random score values for each athlete
+        score_values = []
+        4.times.each_with_index do |i|
+          score_values <<  []
+          3.times do
+            value = rand(100)
+            score_values[i] << {value: value, athlete: athletes[i]}
+            create(:score, competition: @competition, athlete: athletes[i])
+          end
+        end
+
+        #expected ranking output
+        @expected_ranking =  score_values.collect do |values|
+          values.max_by{|v| v[:value]}
+        end
+      end
+      it 'should show ranking in correct order' do
+        get :rank, id: @competition.id
+        expect(response).to have_http_status(:ok)
+        response = json_response
+        response[:data].each_with_index do |i|
+          expect(data[:attributes][:result]).to eq(@expected_ranking[i][:value]  + competition.unity)
+          expect(data[:attributes][:athlete_name]).to eq(@expected_ranking[i][:athlete].name)
+        end
+      end
+    end
+    context 'run100m competition' do
+    end
+    context 'running javelin-throw competition' do
+    end
   end
 
 end
