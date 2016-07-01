@@ -7,6 +7,6 @@ class Serializer
   end
 
   def serialize(obj)
-    @serializer.serialize_to_hash(@resource_klass.new(obj, nil))
+    @serializer.serialize_to_hash(@resource_klass.new(obj, nil))[:data]
   end
 end
