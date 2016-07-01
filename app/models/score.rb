@@ -1,6 +1,7 @@
 class Score < ActiveRecord::Base
   belongs_to :athlete
   belongs_to :competition
+  validates :value, presence: true, numericality: {greater_than_or_equal_to: 0}
   validates :athlete, presence: true
   validates :competition, presence: true
   validate :athlete_scores_number
