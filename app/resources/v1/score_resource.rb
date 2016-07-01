@@ -5,14 +5,14 @@ module V1
     has_one :competition
 
     def athlete_name
-      athlete.name
+      @model.athlete.name
     end
 
     def competition_name
-      competition.name
+      @model.competition.name
     end
     def result
-      value.to_s + competition.unity
+      @model.value.to_s + @model.competition.unity
     end
   end
 end
