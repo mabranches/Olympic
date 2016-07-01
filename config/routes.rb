@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         jsonapi_resources :scores do
         end
       end
+      get :rank
       get :types, on: :collection
     end
 

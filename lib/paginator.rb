@@ -19,6 +19,6 @@ class Paginator
   end
 
   def paginate(records)
-    @paginator.apply(records)
+    @paginator.apply(records, nil)
   end
 end

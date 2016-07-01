@@ -3,13 +3,19 @@ module V1
     include JSONAPI::ActsAsResourceController
 
     def types
-      base_url = request.env['REQUEST_URI'].split(request.env['PATH_INFO'])[0]
       type_serializer = Serializer.new(CompetitionTypeResource, base_url: base_url)
       types = CompetitionType.all
       serialized_types = types.collect do |type|
         type_serializer.serialize(type)
       end
       render json: {data: serialized_types}
+    end
+
+    def rank
+      competition = Competition.find(params[:competition_id])
+      scores = competition.rank
+
+      render json: controller_json_helper(ScoreResource, scores)
     end
   end
 end
