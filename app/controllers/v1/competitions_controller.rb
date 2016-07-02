@@ -1,6 +1,5 @@
 module V1
   class CompetitionsController < ApplicationController
-    include JSONAPI::ActsAsResourceController
 
     def types
       type_serializer = Serializer.new(CompetitionTypeResource, base_url: base_url)

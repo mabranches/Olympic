@@ -15,10 +15,5 @@ module V1
       end
       super
     end
-    #def index
-    #end
-    #def show
-    #end
-
   end
 end
