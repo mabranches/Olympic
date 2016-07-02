@@ -47,22 +47,70 @@ RSpec.describe V1::ScoresController, type: :controller do
 
   end
   describe 'POST #create' do
+    #competicao encerrada - deve falhar
     before do
       @competition = create(:competition, status: :running)
       @athlete = create(:athlete)
-    end
-    it 'should create a new score' do
       @request.env["HTTP_ACCEPT"] = 'application/vnd.api+json'
       @request.env["CONTENT_TYPE"] ='application/vnd.api+json'
+    end
+
+    it 'should create a new score' do
       expect{post :create, data: valid_score_json,
         competition_id: @competition.id, athlete_id: @athlete.id }.to change{Score.count}.by(1)
-    #sem competicao - deve falhar
-    #sem atleta - deve falhar
-    #competicao encerrada - deve falhar
-    #sucesso
+    end
+
+    context 'when creating scores above limit' do
+      before do
+        #get competition with correct class
+        @competition = Competition.find(@competition.id)
+        (@competition.class::MAX_SCORES).times do
+          create(:score, competition: @competition, athlete: @athlete)
+        end
+      end
+
+      it 'should give an error' do
+        expect{post :create, data: valid_score_json,
+          competition_id: @competition.id, athlete_id: @athlete.id }.not_to change{Score.count}
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
   end
+
   describe 'PATCH #update' do
+    before do
+      @request.env["HTTP_ACCEPT"] = 'application/vnd.api+json'
+      @request.env["CONTENT_TYPE"] ='application/vnd.api+json'
+    end
+
+    context 'non existing score' do
+      context 'when updating with valid score' do
+        it 'should give a error' do
+        end
+      end
+    end
+
+    context 'existing score' do
+      before do
+        competition = create(:competition, status: :running)
+        competition = Competition.find(competition.id)
+        athlete = create(:athlete)
+        @score = create(:score, competition: competition, athlete: athlete)
+      end
+
+      context 'when updating with valid score' do
+         it 'should correctly update score' do
+           score_json = valid_score_json
+           score_json[:id] = @score.id
+           expect{patch :update,id: @score.id, data: valid_score_json,
+             competition_id: @score.competition.id,
+             athlete_id: @score.athlete.id}.to change{Score.find(@score.id).
+               value}.from(@score.value).to(score_json[:attributes][:value])
+           result = JSON.parse(response.body)
+           expect(response).to have_http_status(:ok)
+         end
+      end
+    end
     #tenta atualizar
     #atualizar com valor invalido
     #atualiar com competicao encerrada
