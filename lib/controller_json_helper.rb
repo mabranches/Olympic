@@ -14,6 +14,7 @@ module ControllerJsonHelper
         links: links
       }
     end
+
     def base_url
       @base_url ||= request.env['REQUEST_URI'].split(path)[0]
     end

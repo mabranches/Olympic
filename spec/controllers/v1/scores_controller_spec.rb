@@ -22,6 +22,15 @@ require 'rails_helper'
 
 
 RSpec.describe V1::ScoresController, type: :controller do
+  let(:valid_score_json) do
+    {
+      type: 'scores',
+      attributes: {
+        value: rand(100)
+      }
+    }
+  end
+
   describe 'GET #index' do
     #com competicao
     #com atleta
@@ -38,10 +47,20 @@ RSpec.describe V1::ScoresController, type: :controller do
 
   end
   describe 'POST #create' do
+    before do
+      @competition = create(:competition, status: :running)
+      @athlete = create(:athlete)
+    end
+    it 'should create a new score' do
+      @request.env["HTTP_ACCEPT"] = 'application/vnd.api+json'
+      @request.env["CONTENT_TYPE"] ='application/vnd.api+json'
+      expect{post :create, data: valid_score_json,
+        competition_id: @competition.id, athlete_id: @athlete.id }.to change{Score.count}.by(1)
     #sem competicao - deve falhar
     #sem atleta - deve falhar
     #competicao encerrada - deve falhar
     #sucesso
+    end
   end
   describe 'PATCH #update' do
     #tenta atualizar

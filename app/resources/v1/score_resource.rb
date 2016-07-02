@@ -1,6 +1,6 @@
 module V1
   class ScoreResource < JSONAPI::Resource
-    attributes :value, :unity, :athlete_name, :competition_name
+    attributes :value, :unity, :athlete_id, :athlete_name, :competition_id, :competition_name
     has_one :athlete
     has_one :competition
 
