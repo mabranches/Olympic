@@ -4,26 +4,49 @@ RSpec.describe V1::CompetitionsController, type: :controller do
 
   let(:json_response){JSON.parse(response.body, symbolize_names: true)}
   describe 'GET #index' do
-    before do
-      30.times do
-        create(:competition)
+    context 'without relation' do
+      before do
+        30.times do
+          create(:competition)
+        end
+        get :index
+
+        @result = json_response
       end
-      get :index
-      @result = json_response
-    end
 
-    it "resource in correct format" do
-      expect(response).to have_http_status(:ok)
-      expect(@result).to have_key(:data)
-      expect(@result).to have_key(:links)
-    end
+      it "resource in correct format" do
+        expect(response).to have_http_status(:ok)
+        expect(@result).to have_key(:data)
+        expect(@result).to have_key(:links)
+      end
 
-    it 'resouce with correct attributes' do
-      competition = @result[:data].sample
-      expect(["run100ms", "javelin-throws"]).to include(competition[:type])
-      expect(['running','finished']).to include(competition[:attributes][:status])
-      expect(competition[:attributes][:name]).
-        to a_string_starting_with('competition')
+      it 'resouce with correct attributes' do
+        competition = @result[:data].sample
+        expect(["run100ms", "javelin-throws"]).to include(competition[:type])
+        expect(['running','finished']).to include(competition[:attributes][:status])
+        expect(competition[:attributes][:name]).
+          to a_string_starting_with('competition')
+      end
+    end
+    context 'when passing athlete_id' do
+      before do
+        2.times do
+          competitions = []
+          #each athlete will be in only 2 competitions
+          3.times {competitions << create(:javelin_throw, status: :running)}
+          @mock = MockJavelinScores.new(2,3,competitions[0])
+          @mock.create_scores
+          MockJavelinScores.new(2,3,competitions[1], athletes: @mock.athletes).create_scores
+        end
+      end
+      it 'example' do
+        get :get_related_resources, :relationship=>"competitions",
+              :source=>"v1/athletes", athlete_id: @mock.athletes.sample.id
+        result = json_response
+        expect(response).to have_http_status(:ok)
+        expect(result[:data].length).to eq(2)
+        expect(result[:links]).not_to have_key(:next)
+      end
     end
   end
   describe 'GET #show' do
@@ -38,6 +61,7 @@ RSpec.describe V1::CompetitionsController, type: :controller do
         expect(data[:id]).to eq(@competition.id.to_s)
         expect(data[:attributes][:name]).to eq(@competition.name)
         expect(data[:attributes][:status]).to eq(@competition.status)
+
       end
     end
     context 'competition don\'t exist' do
@@ -53,7 +77,9 @@ RSpec.describe V1::CompetitionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-
+     context 'non existing competition' do
+       #put :update
+     end
       #PATCH update
       #--competicao nao existe
         #altera competicao

@@ -17,7 +17,7 @@ RSpec.configure do |config|
 end
 module Run100mRank
   def expected_ranking
-    @score_values.collect do |values|
+    @scores.collect do |values|
       values.min_by{|s| s[:value]}
     end.sort do |a,b|
       [a[:value] ,b[:athlete].age, a[:athlete].name] <=>
@@ -28,7 +28,7 @@ end
 
 module JavenlinThrowRank
   def expected_ranking
-    @score_values.collect do |values|
+    @scores.collect do |values|
       values.max_by{|s| s[:value]}
     end.sort do |a,b|
       [b[:value] ,b[:athlete].age, a[:athlete].name] <=>
@@ -38,21 +38,27 @@ module JavenlinThrowRank
 end
 
 class MockScores
-  def initialize(n_athletes, n_scores, competition)
-    @score_values = []
+  attr_accessor :competition, :score_values
+  def initialize(n_athletes, n_scores, competition, options={})
+    @scores = []
     @n_athletes = n_athletes
     @n_scores = n_scores
     @competition = competition
+    @options = options
+  end
+
+  def athletes
+    @scores.collect{|s| s[0][:athlete]}
   end
 
   def create_scores
-    athletes = []
-    @n_athletes.times {athletes << FactoryGirl.create(:athlete)}
+    athletes = @options.fetch(:athletes, [])
+    @n_athletes.times {athletes << FactoryGirl.create(:athlete)} if athletes.empty?
     @n_athletes.times.each_with_index do |i|
-      @score_values << []
+      @scores << []
       @n_scores.times do
         score = FactoryGirl.create(:score, competition: @competition, athlete: athletes[i])
-        @score_values[i] << {value: score.value, athlete: score.athlete}
+        @scores[i] << {value: score.value, athlete: score.athlete}
       end
     end
   end
@@ -84,7 +90,7 @@ RSpec.shared_examples "competition rank" do |competition_type, n_athletes,
     result = json_response
     result[:data].each_with_index do |score, i|
       expect(score[:attributes][:value]).to eq(expected_ranking[i][:value])
-      expect(score[:attributes][:unity]).to eq(competition.unity)
+      expect(score[:attributes][:unity]).to eq(mock_scores.competition.unity)
       expect(score[:attributes][:'athlete-name']).to eq(expected_ranking[i][:athlete].name)
     end
   end
