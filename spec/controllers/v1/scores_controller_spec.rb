@@ -21,8 +21,11 @@ RSpec.describe V1::ScoresController, type: :controller do
           @competition = create(:javelin_throw, status: :running)
           MockJavelinScores.new(5, 3, @competition).create_scores
         end
+
         it 'should return empty result' do
-          get :index, competition_id: @competition.id, athlete_id: 123
+          expect { get :index, competition_id: @competition.id, athlete_id: 123 }.
+            to make_database_queries(count: 2)
+
           expect(response).to have_http_status(:ok)
           expect(json_response[:data]).to be_empty
         end
@@ -38,7 +41,8 @@ RSpec.describe V1::ScoresController, type: :controller do
 
       it 'should only return scores for this athlete' do
         athlete = @mock.athletes.sample
-        get :index, competition_id: @competition.id, athlete_id: athlete.id
+        expect { get :index, competition_id: @competition.id, athlete_id: athlete.id}.
+          to make_database_queries(count: 2)
         expect(response).to have_http_status(:ok)
         expect(json_response[:data].length).to eq(3)
         expect(json_response[:data].sample[:attributes][:'athlete-id']).to eq(athlete.id)
@@ -68,6 +72,7 @@ RSpec.describe V1::ScoresController, type: :controller do
     it 'should create a new score' do
       expect{post :create, data: valid_score_json,
         competition_id: @competition.id, athlete_id: @athlete.id }.to change{Score.count}.by(1)
+        expect(response).to have_http_status(:created)
     end
 
     context 'when creating scores above limit' do
@@ -118,7 +123,6 @@ RSpec.describe V1::ScoresController, type: :controller do
              competition_id: @score.competition.id,
              athlete_id: @score.athlete.id}.to change{Score.find(@score.id).
                value}.from(@score.value).to(score_json[:attributes][:value])
-           result = JSON.parse(response.body)
            expect(response).to have_http_status(:ok)
          end
       end
