@@ -40,8 +40,9 @@ RSpec.describe V1::CompetitionsController, type: :controller do
         end
       end
       it 'example' do
-        get :get_related_resources, :relationship=>"competitions",
-              :source=>"v1/athletes", athlete_id: @mock.athletes.sample.id
+        expect{get :get_related_resources, :relationship=>"competitions",
+              :source=>"v1/athletes", athlete_id: @mock.athletes.sample.id}.
+          to make_database_queries(count: 3)
         result = json_response
         expect(response).to have_http_status(:ok)
         expect(result[:data].length).to eq(2)
@@ -55,7 +56,8 @@ RSpec.describe V1::CompetitionsController, type: :controller do
         @competition = create(:competition)
       end
       it 'shoud show data' do
-        get :show, id: @competition.id
+        expect{get :show, id: @competition.id}.
+          to make_database_queries(count: 1)
         expect(response).to have_http_status(:ok)
         data = json_response[:data]
         expect(data[:id]).to eq(@competition.id.to_s)
@@ -66,9 +68,10 @@ RSpec.describe V1::CompetitionsController, type: :controller do
     end
     context 'competition don\'t exist' do
       it 'should return error' do
-        get :show, id: 1
+        expect{get :show, id: 1}.
+          to make_database_queries(count: 1)
         expect(response).to have_http_status(:not_found)
-        data = json_response#[:data][0]
+        data = json_response
         expect(data).to have_key(:errors)
         expect(data[:errors][0][:title]).to eq("Record not found")
         expect(data[:errors][0][:detail]).to eq("The record identified by 1 could not be found.")
