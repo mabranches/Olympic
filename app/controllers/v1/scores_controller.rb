@@ -3,7 +3,7 @@ module V1
     include JSONAPI::ActsAsResourceController
 
     def index
-      scores = Score.includes(:athletes, :competitions).where(competition_id: params[:competition_id],
+      scores = Score.eager_load(:athlete, :competition).where(competition_id: params[:competition_id],
                  athlete_id: params[:athlete_id])
       render json: controller_json_helper(ScoreResource, scores)
     end
