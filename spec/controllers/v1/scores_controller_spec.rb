@@ -1,26 +1,5 @@
 require 'rails_helper'
 
-#atleta + competicao
-#GET    /v1/competitions/:competition_id/athletes/:athlete_id/scores(.:format)     v1/scores#index
-#POST   /v1/competitions/:competition_id/athletes/:athlete_id/scores(.:format)     v1/scores#create
-#GET    /v1/competitions/:competition_id/athletes/:athlete_id/scores/:id(.:format) v1/scores#show
-#PATCH  /v1/competitions/:competition_id/athletes/:athlete_id/scores/:id(.:format) v1/scores#update
-#PUT    /v1/competitions/:competition_id/athletes/:athlete_id/scores/:id(.:format) v1/scores#update
-#DELETE /v1/competitions/:competition_id/athletes/:athlete_id/scores/:id(.:format) v1/scores#destroy
-
-# atleta
-#GET    /v1/athletes/:athlete_id/scores(.:format)                                  v1/scores#index
-#GET    /v1/athletes/:athlete_id/scores/:id(.:format)                              v1/scores#show
-
-#competicao
-#GET    /v1/competitions/:competition_id/scores(.:format)                          v1/scores#index
-#GET    /v1/competitions/:competition_id/scores/:id(.:format)                      v1/scores#show
-
-#nada
-#v1_scores GET    /v1/scores(.:format)                                                       v1/scores#index
-#v1_score GET    /v1/scores/:id(.:format)                                                   v1/scores#show
-
-
 RSpec.describe V1::ScoresController, type: :controller do
   let(:valid_score_json) do
     {
@@ -30,11 +9,42 @@ RSpec.describe V1::ScoresController, type: :controller do
       }
     }
   end
+  let(:json_response){JSON.parse(response.body, symbolize_names: true)}
 
   describe 'GET #index' do
     #com competicao
     #com atleta
     #com competicao e atleta
+    context 'When passing a invalid athlete' do
+      context 'trying to get all scores on a competition' do
+        before do
+          @competition = create(:javelin_throw, status: :running)
+          MockJavelinScores.new(5, 3, @competition).create_scores
+        end
+        it 'should return empty result' do
+          get :index, competition_id: @competition.id, athlete_id: 123
+          expect(response).to have_http_status(:ok)
+          expect(json_response[:data]).to be_empty
+        end
+      end
+    end
+
+    context 'When getting all scores of an athlete in a competition' do
+      before do
+        @competition = create(:javelin_throw, status: :running)
+        @mock = MockJavelinScores.new(5, 3, @competition)
+        @mock.create_scores
+      end
+
+      it 'should only return scores for this athlete' do
+        athlete = @mock.athletes.sample
+        get :index, competition_id: @competition.id, athlete_id: athlete.id
+        expect(response).to have_http_status(:ok)
+        expect(json_response[:data].length).to eq(3)
+        expect(json_response[:data].sample[:attributes][:'athlete-id']).to eq(athlete.id)
+        expect(json_response[:data].sample[:attributes][:'competition-id']).to eq(@competition.id)
+      end
+    end
     #todos
   end
   describe 'GET #show' do
@@ -85,6 +95,8 @@ RSpec.describe V1::ScoresController, type: :controller do
 
     context 'non existing score' do
       context 'when updating with valid score' do
+        before do
+        end
         it 'should give a error' do
         end
       end
