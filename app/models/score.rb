@@ -8,14 +8,17 @@ class Score < ActiveRecord::Base
   validate :competition_status
 
   def athlete_scores_number
-    if max_scores < athlete.scores.count + (new_record? ? 1 : 0)
+    return unless new_record?
+    return unless competition && athlete
+    if max_scores < athlete.scores.where(competition_id: competition.id).count + 1
       errors.add(:competition,
         I18n.t('score.beyond_allowed_amount_limit', count: max_scores))
     end
   end
 
   def competition_status
-    if competition.status == 'finished'
+    return unless competition
+    if competition.finished?
       errors.add(:competition,
         I18n.t('score.competition_finished'))
     end
