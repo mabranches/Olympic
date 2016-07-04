@@ -1,19 +1,24 @@
 module ControllerJsonHelper
   private
     def controller_json_helper(resource, query_result)
-      paginator = Paginator.new(params, base_url: base_url, path: path)
       links = paginator.pagination_links(query_count(query_result))
       query_result = paginator.paginate(query_result)
 
-
-      serializer = Serializer.new(resource, base_url: base_url)
       serialized_data = query_result.collect do |result_item|
-        serializer.serialize(result_item)
+        serializer(resource).serialize(result_item)
       end
       {
         data: serialized_data,
         links: links
       }
+    end
+
+    def paginator
+      @paginator ||= Paginator.new(params, base_url: base_url, path: path)
+    end
+
+    def serializer(resource)
+      @serializer ||= Serializer.new(resource, base_url: base_url)
     end
 
     def base_url
