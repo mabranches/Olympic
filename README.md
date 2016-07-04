@@ -2,8 +2,26 @@
 O projeto segue a especificação da [jsonapi](http://jsonapi.org/format/) e utiliza a [jsonapi-resource](https://github.com/cerebris/jsonapi-resources)  
 
 Documentação pode ser acessada na rota http://localhost:3000/api-docs  seguindo o padrão [openapi](http://swagger.io/specification/) utilizando a gem [swagger_rails](https://github.com/domaindrivendev/swagger_rails) que tambem proporciona testes de integração (baseado nas rotas).
+* [Teste](#teste)
+* [Iniciando o server](#iniciando-o-server)
+* [API](#api)
+  * [Competition](#competition)
+    * [Listagem de tipos](#listagem-de-tipos)
+    * [Criação de competição](#criação-de-competição)
+    * [Atualizar competição](#atualizar-competição)
+    * [Detalhes de uma competição](#detalhes-de-uma-competição)
+    * [Listagem de competições](#listagem-de-competições)
+  * [Athlete](#athlete)
+  * [Score](#score)
+    * [Criação de novo _score_](#criação-de-novo-score)
+    * [Atualização de _score_](#atualização-de-score)
+    * [Limitações na criação e atualização de _score_](#limitações-na-criação-e-atualização-de-score)
+  * [Rank](#rank)
+  * [Paginação](#paginação) 
+  * [Filtro](#filtro) 
 
-###Teste
+  
+### Teste
 
 ```shell
 bundle install
@@ -11,7 +29,7 @@ bundle exec rspec spec
 ```
 Nos testes também é avaliado o número de queries executadas com a gem []()
 
-###Iniciando o server
+### Iniciando o server
 ```shell
   bundle install
   bundle exec rails s
@@ -65,7 +83,8 @@ Abaixo um exemplo completo para atleta, nos exemplos futuros ignoraremos _relati
   }
 }
 ```
-#####Competition
+##### Competition
+###### Listagem de tipos
 Na rota /competitions/types é possivel listar todos os tips de competição.
 ```json
 {
@@ -93,6 +112,7 @@ Na rota /competitions/types é possivel listar todos os tips de competição.
   ]
 }
 ```
+######Criação de competição
 Para criar uma nova competição deve-se enviar um POST para rota /v1/competitions 
 
 Deve-se enviar o body no formato abaixo. O atributo _type_ deve ser um dos listados em /v1/competitions/types
@@ -110,6 +130,7 @@ Deve-se enviar o body no formato abaixo. O atributo _type_ deve ser um dos lista
   }
 }
 ```
+######Atualizar competição
 Para atualizacao de uma competição deve-se utilizar o mesmo formato, Só é necessário incluit o atributo alterado mas deve-se também incluir o id do recurso como abaixo:
 
 ```json
@@ -123,6 +144,7 @@ Para atualizacao de uma competição deve-se utilizar o mesmo formato, Só é ne
   }
 }
 ```
+###### Detalhes de uma competição
 Para obter os detalhes de uma competição deve-se fazer um GET na rota /v1/competitions/{id}
 ```json
 {  
@@ -145,6 +167,7 @@ Para obter os detalhes de uma competição deve-se fazer um GET na rota /v1/comp
   }
 }
 ```
+###### Listagem de competições
 Da mesma forma a rota /v1/competitions lista todas as competições cadastradas
 ```json
   {
@@ -200,20 +223,8 @@ Da mesma forma a rota /v1/competitions lista todas as competições cadastradas
   }
 }
 ```
-#####Paginação
-Os links de paginação são retornados numa listagem com os seguintes campos (quando nao aplicavéis alguns serão omitidos)
 
-```json
-   "links":{
-    "first":"link para primeira pagina, sempre presente",
-    "next":"link para proxima pagina, quando relevante",
-    "prev":"link para pagina anterior, quando relevante",
-    "last":"link para primeira pagina, sempre presente"
-  }
-```
-O tamanho de itens por pagina pode ser alterado com o parametro _page[size]_. O parametro _page[number]_ fornece a página corrente.
-
-#####Athlete
+##### Athlete
 O recurso _athlete_ tem comportamento similar a _competition_. O formato para criação de um novo _athlete_ é: 
 ```json
 {
@@ -227,17 +238,9 @@ O recurso _athlete_ tem comportamento similar a _competition_. O formato para cr
   }
 }
 ```
-#####Filtro
-É possível filtrar os resultados para os recursos _athlete_ e _competition_ por algum atributo
-com o parametro filter[attr] por exemplo com a rota
-```uri
-/competitions?filter[name]=name
-```
-O recurso _competition_ pode ser filtrado pelos atributos:name, status, type.
-
-O recurso _athlete_ pode ser filtrado pelos atributos: name, age, sex
-#####Score
+##### Score
 O recurso _score_ representa uma pontução de um atleta em uma competição.
+###### Criação de novo _score_
 para ser criado um _score_ deve ser mandar um post para rota /v1/competitions/:competition_id/athletes/:athlete_id/scores com o body:
 
 ```json
@@ -250,9 +253,11 @@ para ser criado um _score_ deve ser mandar um post para rota /v1/competitions/:c
   }
 }
 ```
+###### Atualização de _score_
 Update é feito da mesma forma que os recursos anteriores na mesma rota realizda no post e contendo o _id_
+###### Limitações na criação e atualização de _score_
 Só é possível cadastrar ou atualizar um _score_ se o status da competição for _running_
-#####Rank
+##### Rank
 É possível obter o rank de uma competição na rota /v1/competitions/{id}/rank 
 Será listado o melhor _score_ do atleta (no caso de múltiplis) ordenados do melhor para o pior.
 Será mostrado nos atributos também a competição e atleta
@@ -415,7 +420,26 @@ Será mostrado nos atributos também a competição e atleta
   }
 }
 ```
+##### Paginação
+Os links de paginação são retornados numa listagem com os seguintes campos (quando nao aplicavéis alguns serão omitidos)
 
+```json
+   "links":{
+    "first":"link para primeira pagina, sempre presente",
+    "next":"link para proxima pagina, quando relevante",
+    "prev":"link para pagina anterior, quando relevante",
+    "last":"link para primeira pagina, sempre presente"
+  }
+```
+O tamanho de itens por pagina pode ser alterado com o parametro _page[size]_. O parametro _page[number]_ fornece a página corrente.
 
+##### Filtro
+É possível filtrar os resultados para os recursos _athlete_ e _competition_ por algum atributo
+com o parametro filter[attr] por exemplo com a rota
+```uri
+/competitions?filter[name]=name
+```
+O recurso _competition_ pode ser filtrado pelos atributos:name, status, type.
 
+O recurso _athlete_ pode ser filtrado pelos atributos: name, age, sex
 
