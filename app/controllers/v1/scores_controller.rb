@@ -5,7 +5,7 @@ module V1
     def index
       scores = Score.eager_load(:athlete, :competition).where(competition_id: params[:competition_id],
                  athlete_id: params[:athlete_id])
-      render json: controller_json_helper(ScoreResource, scores)
+      render json: controller_json_helper(ScoreResource, scores), content_type: 'application/vnd.api+json'
     end
 
     def create

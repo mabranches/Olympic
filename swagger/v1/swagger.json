@@ -1,0 +1,279 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API V1",
+    "version": "v1"
+  },
+  "paths": {
+    "/v1/athletes": {
+      "post": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "creates a new athlete",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "athlete",
+            "in": "body",
+            "required": true,
+            "description": "Data for a new competition",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "attributes"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "required": [
+                        "name"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "age": {
+                          "type": "integer"
+                        },
+                        "sex": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success"
+          },
+          "400": {
+            "description": "invalid request"
+          }
+        }
+      }
+    },
+    "/v1/competitions": {
+      "post": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "creates a new competition",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "competition",
+            "in": "body",
+            "required": true,
+            "description": "Data for a new competition",
+            "schema": {
+              "type": "object",
+              "required": [
+                "data"
+              ],
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "attributes"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "attributes": {
+                      "type": "object",
+                      "required": [
+                        "name"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "success"
+          },
+          "400": {
+            "description": "invalid request"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "list all competitions",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+
+        ],
+        "responses": {
+          "200": {
+            "description": "Competition list"
+          }
+        }
+      }
+    },
+    "/v1/competitions/{id}": {
+      "get": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "Retrieves details about a competition",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Competition ID",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "description": "filter result",
+            "type": "string",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Competition found."
+          },
+          "404": {
+            "description": "Competition not found."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "Update a competition",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string"
+          },
+          {
+            "name": "competition",
+            "in": "body",
+            "required": true,
+            "description": "Data for a new competition",
+            "schema": {
+              "type": "object",
+              "required": [
+                "type",
+                "attributes"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "attributes": {
+                  "type": "object",
+                  "required": [
+                    "name",
+                    "type"
+                  ],
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "competition updated."
+          },
+          "404": {
+            "description": "No competition found for update."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Olympic API"
+        ],
+        "summary": "Deletes a competition",
+        "consumes": [
+          "application/vnd.api+json"
+        ],
+        "produces": [
+          "application/vnd.api+json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Competition deleted"
+          }
+        }
+      }
+    }
+  }
+}

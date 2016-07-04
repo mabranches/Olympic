@@ -27,6 +27,7 @@ RSpec.describe V1::ScoresController, type: :controller do
             to make_database_queries(count: 2)
 
           expect(response).to have_http_status(:ok)
+          expect(response.content_type).to eq('application/vnd.api+json')
           expect(json_response[:data]).to be_empty
         end
       end

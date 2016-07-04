@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  mount SwaggerRails::Engine => '/api-docs'
   namespace :v1 do
     jsonapi_resources :competitions  do
       jsonapi_relationships only: [:index]
