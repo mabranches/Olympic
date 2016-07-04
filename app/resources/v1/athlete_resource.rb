@@ -3,6 +3,6 @@ module V1
     attributes :name, :sex, :age
     has_many :scores
     has_many :competitions, through: :scores
-    filters :name
+    filters :name, :sex, :age
   end
 end
