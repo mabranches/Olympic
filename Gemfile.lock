@@ -1,6 +1,5 @@
-GIT
-  remote: git@github.com:cerebris/jsonapi-resources.git
-  revision: ce94ced08c3f8db1b2b3ffd7f67925fd50f4cf81
+PATH
+  remote: /home/manoel/projects/jsonapi-resources
   specs:
     jsonapi-resources (0.7.0)
       concurrent-ruby
@@ -123,6 +122,9 @@ GEM
       rspec-mocks (~> 3.5.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
+    seed_dump (3.2.4)
+      activerecord (>= 4)
+      activesupport (>= 4)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -155,6 +157,7 @@ DEPENDENCIES
   rails (= 4.2.6)
   rails-api
   rspec-rails
+  seed_dump
   simplecov
   sqlite3
   swagger_rails
