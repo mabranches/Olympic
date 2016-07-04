@@ -236,7 +236,7 @@ com o parametro filter[attr] por exemplo com a rota
 O recurso _competition_ pode ser filtrado pelos atributos:name, status, type.
 
 O recurso _athlete_ pode ser filtrado pelos atributos: name, age, sex
-#Score
+#####Score
 O recurso _score_ representa uma pontução de um atleta em uma competição.
 para ser criado um _score_ deve ser mandar um post para rota /v1/competitions/:competition_id/athletes/:athlete_id/scores com o body:
 
