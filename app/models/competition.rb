@@ -3,14 +3,14 @@ class Competition < ActiveRecord::Base
   enum status: [:running, :finished]
   validates :name, presence: true, uniqueness: true
   has_many :scores
-  has_many :athletes, -> {distinct}, through: :scores
+  has_many :athletes, -> { distinct }, through: :scores
 
   def unity
-    class_eval(self.type)::UNITY
+    class_eval(type)::UNITY
   end
 
   def max_scores
-    class_eval(self.type)::MAX_SCORES
+    class_eval(type)::MAX_SCORES
   end
 
   def self.types
