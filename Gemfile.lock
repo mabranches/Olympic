@@ -1,5 +1,7 @@
-PATH
-  remote: /home/manoel/projects/jsonapi-resources
+GIT
+  remote: git@github.com:cerebris/jsonapi-resources.git
+  revision: ce94ced08c3f8db1b2b3ffd7f67925fd50f4cf81
+  ref: ce94ced08c3f8db1b2b3ffd7f67925fd50f4cf81
   specs:
     jsonapi-resources (0.7.0)
       concurrent-ruby

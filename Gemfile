@@ -10,7 +10,7 @@ gem 'jsonapi-resources', git: 'git@github.com:cerebris/jsonapi-resources.git', r
 gem 'swagger_rails'
 group :development, :test do
   gem 'byebug'
- gem 'seed_dump'
+  gem 'seed_dump'
 end
 
 group :test do
