@@ -4,5 +4,5 @@ class Athlete < ActiveRecord::Base
   validates :sex, presence: true
   validates :age, presence: true
   has_many :scores
-  has_many :competitions, ->{distinct}, through: :scores
+  has_many :competitions, -> { distinct }, through: :scores
 end
