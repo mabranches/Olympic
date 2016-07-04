@@ -9,7 +9,7 @@ describe 'Olympic API' do
     post 'creates a new athlete' do
       consumes 'application/vnd.api+json'
       produces 'application/vnd.api+json'
-      parameter :athletes, in: :body, required: true,
+      parameter :athlete, in: :body, required: true,
         description: "Data for a new competition",
         schema: {
           type: :object,
@@ -22,10 +22,11 @@ describe 'Olympic API' do
                 type: {type: :string},
                 attributes: {
                   type: :object,
-                  required: [:name, :type],
+                  required: [:name],
                   properties:{
                     name: {type: :string},
-                    type: {type: :string}
+                    age: {type: :integer},
+                    sex: {type: :string}
                   }
                 }
               }
@@ -34,12 +35,12 @@ describe 'Olympic API' do
         }
 
       response 201, 'success' do
-        let(:data) { {data:{ type: 'athletes', attributes:{type:'Run100m', name: 'athlete'} }} }
+        let(:athlete) { {data:{ type: 'athletes', attributes:{ name: 'athlete', age: rand(10..50), sex: ['f','m'].sample} }} }
         run_test!
       end
 
       response 400, 'invalid request' do
-        let(:data) { {data:{ attributes:{} }} }
+        let(:athlete) { {data:{ attributes:{} }} }
         run_test!
       end
     end
