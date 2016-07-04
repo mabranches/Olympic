@@ -10,9 +10,9 @@ class Score < ActiveRecord::Base
   def athlete_scores_number
     return unless new_record?
     return unless competition && athlete
-    if max_scores < athlete.scores.where(competition_id: competition.id).count + 1
+    if competition.max_scores < athlete.scores.where(competition_id: competition.id).count + 1
       errors.add(:competition,
-        I18n.t('score.beyond_allowed_amount_limit', count: max_scores))
+        I18n.t('score.beyond_allowed_amount_limit', count: competition.max_scores))
     end
   end
 
@@ -23,9 +23,4 @@ class Score < ActiveRecord::Base
         I18n.t('score.competition_finished'))
     end
   end
-
-  private
-    def max_scores
-      @max_scores ||= competition.class::MAX_SCORES
-    end
 end

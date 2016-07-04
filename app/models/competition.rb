@@ -6,7 +6,11 @@ class Competition < ActiveRecord::Base
   has_many :athletes, -> {distinct}, through: :scores
 
   def unity
-    self.class::UNITY
+    class_eval(self.type)::UNITY
+  end
+
+  def max_scores
+    class_eval(self.type)::MAX_SCORES
   end
 
   def self.types
