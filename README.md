@@ -1,7 +1,7 @@
 # Olympic
 O projeto segue a especificação da [jsonapi](http://jsonapi.org/format/) e utiliza a [jsonapi-resource](https://github.com/cerebris/jsonapi-resources)  
 
-Documentação pode ser acessada na rota http://localhost:3000/api-docs  seguindo o padrão [openapi](http://swagger.io/specification/) utilizando a gem [swagger_rails](https://github.com/domaindrivendev/swagger_rails) que tambem proporciona testes de integração (baseado nas rotas).
+Documentação adicional pode ser acessada em `http://localhost:3000/api-docs`  seguindo o padrão [openapi](http://swagger.io/specification/) utilizando a gem [swagger_rails](https://github.com/domaindrivendev/swagger_rails) que também proporciona testes de integração (baseado nas rotas).
 * [Teste](#teste)
 * [Iniciando o server](#iniciando-o-server)
 * [API](#api)
@@ -85,7 +85,7 @@ Abaixo um exemplo completo para atleta, nos exemplos futuros ignoraremos _relati
 ```
 ##### Competition
 ###### Listagem de tipos
-Na rota /competitions/types é possivel listar todos os tips de competição.
+Na rota `/competitions/types` é possivel listar todos os tips de competição.
 ```json
 {
   "data":[
@@ -113,9 +113,9 @@ Na rota /competitions/types é possivel listar todos os tips de competição.
 }
 ```
 ######Criação de competição
-Para criar uma nova competição deve-se enviar um POST para rota /v1/competitions 
+Para criar uma nova competição deve-se enviar um POST para rota `/v1/competitions` 
 
-Deve-se enviar o body no formato abaixo. O atributo _type_ deve ser um dos listados em /v1/competitions/types
+Deve-se enviar o body no formato abaixo. O atributo _type_ deve ser um dos listados em `/v1/competitions/types`
 ```json
 {
   "data":{
@@ -145,7 +145,7 @@ Para atualizacao de uma competição deve-se utilizar o mesmo formato, Só é ne
 }
 ```
 ###### Detalhes de uma competição
-Para obter os detalhes de uma competição deve-se fazer um GET na rota /v1/competitions/{id}
+Para obter os detalhes de uma competição deve-se fazer um GET na rota `/v1/competitions/{id}`
 ```json
 {  
   "data":{  
@@ -168,7 +168,7 @@ Para obter os detalhes de uma competição deve-se fazer um GET na rota /v1/comp
 }
 ```
 ###### Listagem de competições
-Da mesma forma a rota /v1/competitions lista todas as competições cadastradas
+Da mesma forma a rota `/v1/competitions` lista todas as competições cadastradas
 ```json
   {
   "data":[
@@ -241,7 +241,7 @@ O recurso _athlete_ tem comportamento similar a _competition_. O formato para cr
 ##### Score
 O recurso _score_ representa uma pontução de um atleta em uma competição.
 ###### Criação de novo _score_
-para ser criado um _score_ deve ser mandar um post para rota /v1/competitions/:competition_id/athletes/:athlete_id/scores com o body:
+para ser criado um _score_ deve ser mandar um post para rota `/v1/competitions/:competition_id/athletes/:athlete_id/scores` com o body:
 
 ```json
 {
@@ -258,7 +258,7 @@ Update é feito da mesma forma que os recursos anteriores na mesma rota realizda
 ###### Limitações na criação e atualização de _score_
 Só é possível cadastrar ou atualizar um _score_ se o status da competição for _running_
 ##### Rank
-É possível obter o rank de uma competição na rota /v1/competitions/{id}/rank 
+É possível obter o rank de uma competição na rota `/v1/competitions/{id}/rank`
 Será listado o melhor _score_ do atleta (no caso de múltiplis) ordenados do melhor para o pior.
 Será mostrado nos atributos também a competição e atleta
 ```json
