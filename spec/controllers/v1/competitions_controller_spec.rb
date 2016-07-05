@@ -103,6 +103,7 @@ RSpec.describe V1::CompetitionsController, type: :controller do
       controller.request.env['REQUEST_URI'] = 'http://example.com/competitions/types'
       controller.request.env['PATH_INFO'] = '/competitions/types'
       get :types
+      expect(response).to have_http_status(:ok)
       expect(response.content_type).to eq('application/vnd.api+json')
       result = json_response
       expect(result[:data].length).to eq(CompetitionType.all.length)

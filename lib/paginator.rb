@@ -19,6 +19,7 @@ class Paginator
   end
 
   def paginate(records)
+    return records if records.kind_of? Array
     @paginator.apply(records, nil)
   end
 end

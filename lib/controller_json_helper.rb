@@ -30,6 +30,7 @@ module ControllerJsonHelper
     end
 
     def query_count(query_result)
+      return query_result.length if query_result.kind_of? Array
       count = query_result.count
       count.try(:length) || count
     end
