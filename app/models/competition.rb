@@ -13,12 +13,4 @@ class Competition < ActiveRecord::Base
     class_eval(type)::MAX_SCORES
   end
 
-  def self.types
-    #TODO return object that answers to :count, :offset and :limit
-    id = 0
-    @types ||= Competition.descendants.collect do |d|
-      id += 1
-      CompetitionType.new(id, d.name)
-    end
-  end
 end
